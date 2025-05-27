@@ -2,6 +2,9 @@ package com.practice.shareitdiana.user;
 
 
 import com.practice.shareitdiana.item.Item;
+import com.practice.shareitdiana.user.dto.UserCreateDto;
+import com.practice.shareitdiana.user.dto.UserResponseDto;
+import com.practice.shareitdiana.user.dto.UserUpdateDto;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,12 +18,11 @@ public interface UserService {
 
     User findUserById(int id);
 
-    User findUserByEmail(String email);
+    // User findUserByEmail(String email);
 
-    User createUser(User user);
+    User createUser(String name, String email);
 
-    User updateUser(User user);
+    User updateUser(int id, UserUpdateDto updatedDto);
 
     void deleteUser(int id);
-
 }

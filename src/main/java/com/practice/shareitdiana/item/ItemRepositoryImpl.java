@@ -11,7 +11,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     // временное хранилище данных о вещах вместо базы
     private final HashMap<Integer, Item> items = new HashMap<>();
-    private int nextId = 1;
+    private int nextId = 0;
 
     @Override
     public Collection<Item> findAllItems() {
@@ -30,10 +30,12 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Item createItem(Item item) {
-        item.setId(nextId++);
+        int id = ++nextId;
+        item.setId(id);
         items.put(item.getId(), item);
         return item;
     }
+
 
     @Override
     public Item updateItem(Item item) {

@@ -1,12 +1,10 @@
 package com.practice.shareitdiana.item;
-
-import com.practice.shareitdiana.user.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Setter
@@ -18,13 +16,11 @@ import lombok.experimental.FieldDefaults;
 
 public class Item {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Id
+//    @GeneratedValue(strategy = IDENTITY)
     int id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "owner_id")
-    User owner;
+    int ownerId;
 
     @Size(max = 150)
     String name;
@@ -34,12 +30,4 @@ public class Item {
 
     @Enumerated(EnumType.STRING)
     ItemStatus status;
-
-    public Item(String name, String description, Boolean available) {
-        this.name = name;
-        this.description = description;
-        // если доступ ТРУ, то ДОСТУПЕН
-        // если ФОЛЗ, то НЕДОСТУПЕН
-        this.status = available != null && available ? ItemStatus.AVAILABLE : ItemStatus.UNAVAILABLE;
-    }
 }

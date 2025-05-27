@@ -7,11 +7,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class ItemMapper {
 
+    public Item fromCreate(ItemCreateDto createdItem, int ownerId) {
+        Item item = new Item();
+        item.setName(createdItem.getName());
+        item.setOwnerId(ownerId);
+        item.setDescription(createdItem.getDescription());
+        item.setStatus(createdItem.getAvailable() != null ?
+                (createdItem.getAvailable() ? ItemStatus.AVAILABLE : ItemStatus.UNAVAILABLE) : ItemStatus.AVAILABLE);
+        return item;
+    }
+
     public Item fromCreate(ItemCreateDto createdItem) {
         Item item = new Item();
         item.setName(createdItem.getName());
         item.setDescription(createdItem.getDescription());
-        item.setStatus(createdItem.getAvailable() ? ItemStatus.AVAILABLE : ItemStatus.UNAVAILABLE);
+        item.setStatus(createdItem.getAvailable() != null ?
+                (createdItem.getAvailable() ? ItemStatus.AVAILABLE : ItemStatus.UNAVAILABLE) : ItemStatus.AVAILABLE);
         return item;
     }
 
@@ -31,9 +42,26 @@ public class ItemMapper {
         return existingItem;
     }
 
+//    public Item fromUpdate(Item existingItem, ItemUpdateDto updatedItem) {
+//        // если НЕ пустой параметр, то ОБНОВЛЯЕМ имеющуюся вещь
+//        if (updatedItem.getName() != null) {
+//            existingItem.setName(updatedItem.getName());
+//        }
+//        // если НЕ пустой параметр, то ОБНОВЛЯЕМ имеющуюся вещь
+//        if (updatedItem.getDescription() != null) {
+//            existingItem.setDescription(updatedItem.getDescription());
+//        }
+//        // если НЕ пустой параметр, то ОБНОВЛЯЕМ имеющуюся вещь
+//        if (updatedItem.getAvailable() != null) {
+//            existingItem.setStatus(updatedItem.getAvailable() ? ItemStatus.AVAILABLE : ItemStatus.UNAVAILABLE);
+//        }
+//        return existingItem;
+//    }
+
     public ItemResponseDto toResponse(Item item) {
         ItemResponseDto itemResponseDto = new ItemResponseDto();
         itemResponseDto.setId(item.getId());
+        itemResponseDto.setOwnerId(item.getOwnerId());
         itemResponseDto.setName(item.getName());
         itemResponseDto.setDescription(item.getDescription());
         // если выражение ТРУ, то ДОСТУПЕН

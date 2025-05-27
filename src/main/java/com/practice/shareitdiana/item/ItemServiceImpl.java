@@ -7,6 +7,7 @@ import com.practice.shareitdiana.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -36,13 +37,18 @@ public class ItemServiceImpl implements ItemService {
         if (text == null || text.isBlank()) {
             return List.of();
         }
-        // работа с текстом - чувствительност к регистру
+        // работа с текстом - чувствительность к регистру
         String lowerText = text.toLowerCase();
-        return itemRepository.findAllItems().stream()
+        Collection<Item> result = itemRepository.findAllItems().stream()
                 .filter(item -> item.getStatus() == ItemStatus.AVAILABLE)
-                .filter(item -> item.getName().toLowerCase().contains(lowerText)
-                        || item.getDescription().toLowerCase().contains(lowerText))
+                .filter(item -> {
+                    boolean matches = item.getName().toLowerCase().contains(lowerText)
+                            || item.getDescription().toLowerCase().contains(lowerText);
+                    return matches;
+                })
                 .toList();
+        log.info("Найдено {} вещей", result.size());
+        return result;
     }
 
     // поиск всех вещей ОПРЕДЕЛЕННОГО ВЛАДЕЛЬЦА
@@ -50,9 +56,11 @@ public class ItemServiceImpl implements ItemService {
     public Collection<Item> findAllItemsByOwner(int ownerId) {
         userRepository.findUserById(ownerId)
                 .orElseThrow(() -> new UserNotFoundException("Пользователь с данным id (" + ownerId + ") не найден"));
-        return itemRepository.findAllItems().stream()
-                .filter(item -> item.getOwner().getId() == ownerId)
+        Collection<Item> result = itemRepository.findAllItems().stream()
+                .filter(item -> item.getOwnerId() == ownerId)
                 .toList();
+        log.info("Найдено {} вещей у владельца ({})", result.size(), ownerId);
+        return result;
     }
 
     // поиск доступных вещей У ОПРЕДЕЛЕННОГО ВЛАДЕЛЬЦА
@@ -79,27 +87,29 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    //@Transactional
     public Item createItem(Item item, int ownerId) {
         User owner = userRepository.findUserById(ownerId)
                 .orElseThrow(() -> new UserNotFoundException("Пользователь с данным id (" + ownerId + ") не найден"));
-        item.setOwner(owner);
+        item.setOwnerId(ownerId);
         log.info("Пользователь {} добавил новую вещь: {}", owner.getName(), item.getName());
         return itemRepository.createItem(item);
     }
 
     @Override
+    //@Transactional
     public Item updateItem(Item updatedItem) {
         Item item = itemRepository.findItemById(updatedItem.getId())
                 .orElseThrow(() -> new ItemNotFoundException("Вещь с данным id (" + updatedItem.getId() + ") не найдена"));
-        log.info("Пользователь {} обновил вещь: {}", updatedItem.getOwner().getName(), item.getName());
-        return itemRepository.updateItem(item);
+        log.info("Пользователь ({}) обновил вещь: {}", updatedItem.getOwnerId(), item.getName());
+        return itemRepository.updateItem(updatedItem);
     }
 
     @Override
     public void deleteItem(int id) {
         Item item = itemRepository.findItemById(id)
                 .orElseThrow(() -> new ItemNotFoundException("Вещь с данным id (" + id + ") не найдена"));
-        log.info("Пользователь {} удалил вещь: {}", item.getOwner().getName(), item.getName());
+        log.info("Пользователь ({}) удалил вещь: {}", item.getOwnerId(), item.getName());
         itemRepository.deleteItemById(id);
     }
 

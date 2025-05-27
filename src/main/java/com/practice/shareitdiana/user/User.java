@@ -10,8 +10,6 @@ import java.util.Optional;
 
 @Getter
 @Setter
-//@Entity
-//@Table(name = "users")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,14 +18,12 @@ import java.util.Optional;
 
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    @NotBlank(message = "Имя пользователя не может быть пустым")
+    // @NotBlank(message = "Имя пользователя не может быть пустым")
     String name;
 
-    @NotBlank(message = "Почта пользователя не может быть пустой")
+    // @NotBlank(message = "Почта пользователя не может быть пустой")
     @Email(message = "Некорректный формат email")
     String email;
 

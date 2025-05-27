@@ -1,20 +1,30 @@
 package com.practice.shareitdiana.user;
 
-import com.practice.shareitdiana.exception.UserNotFoundException;
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 
 public class UserRepositoryImpl implements UserRepository {
 
     // временное хранилище данных о пользователях вместо базы
     private final Map<Integer, User> users = new HashMap<>();
-    private int nextId = 1;
+    private final Set<String> emails = new HashSet<>();             // ПОЧТЫЫЫЫЫЫЫ
+    private int countId = 0;
+
+    @Override
+    public User save(User user) {           // заместитель create
+        int id = ++countId;
+        user.setId(id);
+        users.put(id, user);
+        emails.add(user.getEmail());
+        return user;
+    }
 
     @Override   // может вернуть пользователя, а может и не вернуть
     public Optional<User> findUserById(int id) {
@@ -34,17 +44,10 @@ public class UserRepositoryImpl implements UserRepository {
         return new ArrayList<>(users.values());
     }
 
-    @Override
-    public boolean existsById(int id) {
-        return users.containsKey(id);
-    }
-
-    @Override
-    public User createUser(User user) {
-        user.setId(nextId++);
-        users.put(user.getId(), user);
-        return user;
-    }
+//    @Override
+//    public boolean existsById(int id) {
+//        return users.containsKey(id);
+//    }
 
     @Override
     public User updateUser(User user) {
@@ -54,6 +57,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void deleteUserById(int id) {
-        users.remove(id);
+        User removed = users.remove(id);
+        if (removed != null) {
+            emails.remove(removed.getEmail());
+        }
     }
 }

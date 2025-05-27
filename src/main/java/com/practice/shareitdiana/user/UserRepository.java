@@ -16,14 +16,11 @@ public interface UserRepository {
 
     Collection<User> findAllUsers();
 
-    boolean existsById(int id);
+    // boolean existsById(int id);
 
-    User createUser(User user);
+    User save(User user);
 
     User updateUser(User user);
 
     void deleteUserById(int id);
-
-    // Сохраняет нового пользователя в базе и возвращает его с присвоенным ID
-    // User save(User user);
 }

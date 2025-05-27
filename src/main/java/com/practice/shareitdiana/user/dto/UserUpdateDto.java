@@ -8,12 +8,12 @@ import lombok.Setter;
 @Setter
 
 public class UserUpdateDto {
-
-    // @NotBlank
+    // @Size(max = 255, message = "Имя должно содержать от 1 до 255 символов")
+    // @NotBlank(message = "Имя пользователя не должно быть пустым")
     private String name;
 
-    // @NotBlank
-    @Email(message = "Почта должна содержать символ @")
+    // @Size(max = 255)
+    @Email(message = "Формат email должен соответствовать \"user@mail.com\"", regexp = ".*")
+    // @NotBlank(message = "Почта пользователя должна быть указана")
     private String email;
-
 }

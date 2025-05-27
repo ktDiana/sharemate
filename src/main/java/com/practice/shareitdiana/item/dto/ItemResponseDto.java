@@ -1,5 +1,6 @@
 package com.practice.shareitdiana.item.dto;
 
+import com.practice.shareitdiana.item.ItemStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,8 +13,8 @@ import lombok.experimental.FieldDefaults;
 public class ItemResponseDto {
 
     int id;
+    int ownerId;
     String name;
     String description;
     Boolean available;
-
 }

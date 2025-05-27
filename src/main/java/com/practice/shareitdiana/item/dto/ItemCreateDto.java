@@ -22,15 +22,8 @@ public class ItemCreateDto {
     String description;
 
     // Не включаем owner в Dto, чтобы не возвращать полные данные о владельце (в таске readme был намёк..........)
-    // User owner;
+    // int ownerId;
 
-    // ItemStatus status;
-    @NotNull
+    @NotNull(message = "Поле 'available' обязательно")
     Boolean available;
 }
-
-// DTO для Item:
-//ItemDto: Для создания/обновления/возврата вещи.
-//Поля: id (может быть null при создании), name, description, available.
-//Не включай owner в DTO, чтобы не возвращать полные данные о владельце (по требованиям).
-//ItemSearchDto (опционально): Для представления результатов поиска (может совпадать с ItemDto).

@@ -15,8 +15,8 @@ public class UserCreateDto {
     @NotBlank(message = "Имя пользователя не может быть пустым")
     private String name;
 
-    @Email(message = "Почта должна быть в формате \"user@mail.com\"")
     @NotBlank(message = "Почта пользователя не может быть пустой")
+    @Email(message = "Почта должна быть в формате \"user@mail.com\"")
     private String email;
 
 }

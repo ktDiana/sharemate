@@ -3,27 +3,29 @@ package com.practice.shareitdiana.user.dto;
 import com.practice.shareitdiana.user.User;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 
 // UserCreateDto -> User -> UserResponseDto
 
 public class UserMapper {
 
-    public User fromCreate(UserCreateDto userCreate) {
+    public User fromCreate(UserCreateDto createdDto) {
         User user = new User();
-        user.setName(userCreate.getName());
-        user.setEmail(userCreate.getEmail());
-        return user;
+//        user.setName(createdDto.getName());
+//        user.setEmail(createdDto.getEmail());
+//        return user;
+        return new User(0, createdDto.getName(), createdDto.getEmail());
     }
 
-    public User fromUpdate(User existingUser, UserUpdateDto updatedUser) {
-        if (updatedUser.getName() != null && !updatedUser.getName().trim().isEmpty()) {
-            existingUser.setName(updatedUser.getName().trim());
+    public void fromUpdate(User existingUser, UserUpdateDto updatedUser) {
+        if (updatedUser.getName() != null) {
+            existingUser.setName(updatedUser.getName());
         }
-        if (updatedUser.getEmail() != null && !updatedUser.getEmail().trim().isEmpty()) {
+        if (updatedUser.getEmail() != null) {
             existingUser.setEmail(updatedUser.getEmail());
         }
-        return existingUser;
     }
 
     public UserResponseDto toResponse(User user) {
